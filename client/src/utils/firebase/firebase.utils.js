@@ -1,6 +1,13 @@
-import { getAuth } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { initializeApp } from 'firebase/app'
-
+import { 
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBm8Xi27qCSLedHH-gadbDgNOAYoSqkECE",
@@ -15,4 +22,50 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const firebaseAuth = getAuth(app);
+export const firebaseAuth = getAuth(app)
+
+
+
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+});
+
+
+export const auth = getAuth();
+
+export const signInWithGooglePopup = () => 
+  signInWithPopup(auth, googleProvider)
+
+
+
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if(!email || !password) return; 
+
+
+  return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const signInAuthWithEmailAndPassword = async (email, password) => {
+  if(!email || !password) return;
+
+  return await signInWithEmailAndPassword(auth, email, password)
+};
+
+export const signOutUser = async () => await signOut(auth);
+
+
+export const getCurrentUser = () => {
+  return new Promise( (resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    )
+  })
+}
