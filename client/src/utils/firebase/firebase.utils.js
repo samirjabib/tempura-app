@@ -1,7 +1,7 @@
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { initializeApp } from 'firebase/app'
 import { 
   signInWithPopup,
+  getAuth,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -34,6 +34,7 @@ googleProvider.setCustomParameters({
 
 
 export const auth = getAuth();
+console.log(auth)
 
 export const signInWithGooglePopup = () => 
   signInWithPopup(auth, googleProvider)
@@ -55,6 +56,9 @@ export const signInAuthWithEmailAndPassword = async (email, password) => {
 };
 
 export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) => 
+  onAuthStateChanged(auth, callback);
 
 
 export const getCurrentUser = () => {

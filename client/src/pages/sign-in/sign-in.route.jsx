@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
+
 import BackgroundImage from "../../components/background-image/background-image.component";
 import Header from "../../components/header/header.component";
 
@@ -12,7 +14,7 @@ const defaultFormFields = {
 }
 
 
-const SignUp = () => {
+const SignIn = () => {
 
     const [ formFields, setFormFields ] = useState(defaultFormFields);
     const [ showPassword, setShowPassword] = useState(false)
@@ -119,4 +121,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default SignIn;
