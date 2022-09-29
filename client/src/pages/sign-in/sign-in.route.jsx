@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
-
 import BackgroundImage from "../../components/background-image/background-image.component";
 import Header from "../../components/header/header.component";
 
@@ -16,12 +14,18 @@ const defaultFormFields = {
 
 const SignIn = () => {
 
+   
+
     const [ formFields, setFormFields ] = useState(defaultFormFields);
     const [ showPassword, setShowPassword] = useState(false)
     
     const { name, email, password, confirmPassword } = formFields;
 
     const navigate = useNavigate();
+
+    const resetFormFields = () => {
+        setFormFields(defaultFormFields);
+    }
 
     const handleChange = (event) => {    
         const { name, value } = event.target;
@@ -38,8 +42,9 @@ const SignIn = () => {
         }
 
         try{
-            const { email, password, name } = formFields;
-    
+           
+            
+            
             
         }catch(error){
             console.log('user creation encountered an error',error)
