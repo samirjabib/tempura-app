@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { 
+    createUserWithEmailAndPassword,
+    onAuthStateChanged
+} from 'firebase/auth'
+
+import { firebaseAuth } from '../../utils/firebase/firebase.utils'
+import { AiFillEye ,AiFillEyeInvisible } from 'react-icons/ai';
+
 import BackgroundImage from "../../components/background-image/background-image.component";
 import Header from "../../components/header/header.component";
 
@@ -17,7 +25,22 @@ const SignIn = () => {
    
 
     const [ formFields, setFormFields ] = useState(defaultFormFields);
-    const [ showPassword, setShowPassword] = useState(false)
+
+    const [showPassword, setShowPassword] = useState(false)
+    console.log(showPassword)
+    const [ passwordType, setPasswordType] = useState("password")
+    
+    const handlePasswordView = () => {
+        if(passwordType==="password"){
+            setPasswordType("text");
+            setShowPassword(true);
+            return;
+        }
+        if(passwordType==="text"){
+            setPasswordType("password");
+            setShowPassword(false);
+        }
+    }
     
     const { name, email, password, confirmPassword } = formFields;
 
@@ -29,11 +52,13 @@ const SignIn = () => {
 
     const handleChange = (event) => {    
         const { name, value } = event.target;
+
         
         setFormFields({...formFields, [name] : value})
     }
     
-    const handleSubmit = () => async(event) => {
+  
+    const handleSignIn = () => async(event) => {
         event.preventDefault();
 
         if(password !== confirmPassword){
@@ -42,34 +67,38 @@ const SignIn = () => {
         }
 
         try{
-           
-            
-            
-            
+            const { email, password, name } =  formFields;
+            await createUserWithEmailAndPassword(firebaseAuth, email, password, name);
+            console.log(email, password, name)
         }catch(error){
             console.log('user creation encountered an error',error)
         };
     };
 
+    onAuthStateChanged(firebaseAuth, (currentUser) => {
+        if(currentUser) navigate("/")
+    })
+
     const handleRedirectLogin = () => {
         navigate("/login")
     }
 
-    const handlePasswordView = () => {
-        
-    }
 
 
     return (
         <div className="relative" >
             <BackgroundImage/>
             <Header/>
-            <div className="absolute top-0 left-0 bg-black/20 h-screen w-screen flex flex-col justify-center items-center z-20 ">
-                <div className="min-w-[320px] bg-black/75 text-white text-center relative top-10 lg:min-w-[520px] shadow-2xl">
-                    <div className="mx-auto py-16 text-black" >
-                        <span className="text-gray-300 relative bottom-7 text-lg">¿don't have account? <span>&#128071;</span></span>
+            <div className="absolute top-0 left-0 bg-black/20 h-screen w-screen flex flex-col justify-center items-center z-20">
+                <div className="min-w-[320px] bg-black/75 text-white text-center relative top-10 lg:min-w-[320px] shadow-2xl rounded-2xl">
+                    <div className="mx-auto py-4 text-black" >
                         <h2 className="text-3xl font-bold text-white mb-10 hover:text-yellow-500">Sign In</h2>
-                        <form onChange={ handleSubmit} className='w-[80%] flex flex-col py-4 z-50 mx-auto'>
+                        <p 
+                        className="text-gray-300 relative bottom-7 text-lg ">
+                            <span className="">¿don't have account? </span>
+                            <span>&#128071;</span>
+                        </p>
+                        <form onChange={ handleSignIn} className='w-[80%] flex flex-col py-4 z-50 mx-auto text-sm'>
                             <input 
                             type="text" 
                             placeholder='Display Name' 
@@ -88,17 +117,42 @@ const SignIn = () => {
                             required
                             onChange={handleChange}   
                             />
+                            <div className="relative">
                             <input 
-                            className="py-3 my-2 bg-white rounded p-2"
-                            type="password" 
-                            placeholder="Password" 
-                            name="password" 
-                            value={password}
-                            required
-                            onChange={handleChange}
+                                className="py-3 my-2 bg-white rounded p-2 w-full" 
+                                type={passwordType} 
+                                placeholder="Password" 
+                                name="password" 
+                                value={password}
+                                required
+                                onChange={handleChange}
                             />
+                            <button onClick={handlePasswordView}>
+                            {showPassword
+                                ? 
+                                    <AiFillEyeInvisible 
+                                    className="absolute top-0  right-4 bottom-0 m-auto"
+                                    size={20}
+                                    required
+                                    />  
+                                :
+ 
+                                    <AiFillEye 
+                                    className="absolute top-0  right-4 bottom-0 m-auto" 
+                                    size={20}
+                                    />
+                            }
+                                
+                              
+                            </button>
+                            
+                           
+
+                            </div>
+                        
+
                             <input 
-                            className="py-3 my-2 bg-white rounded p-2"
+                            className="py-3 my-2 bg-white rounded p-2 "
                             type="password" 
                             placeholder="Confirm password" 
                             name="confirmPassword" 
@@ -110,10 +164,13 @@ const SignIn = () => {
                             className="bg-yellow-500 py-3 my-6 rounded font-bold relative top-10 text-lg"> 
                                 Get Started
                             </button>
-                            <h3 className="text-white mt-10">
-                                You have account?  
+                            <h3 className="text-white mt-10 ">
+                                <span className="underline">
+                                    You have account?   
+                                </span>
+                               
                                 <span 
-                                className="text-yellow-500 font-semibold cursor-pointer" 
+                                className="text-yellow-500 font-semibold cursor-pointer m-2" 
                                 onClick={handleRedirectLogin}>
                                     Login
                                 </span>
