@@ -2,7 +2,9 @@ import { Routes, Route } from "react-router-dom";
 
 import Login from './pages/login/login.route';
 import SignIn from './pages/sign-in/sign-in.route';
-import Tempura from './pages/tempura/tempura.route'
+import Tempura from './pages/tempura/tempura.route';
+
+
 const App = () => {
 
   return (

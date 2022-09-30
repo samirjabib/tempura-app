@@ -21,16 +21,45 @@ const defaultFormFields = {
 
 
 const SignIn = () => {
+    const navigate = useNavigate();
 
-   
-
+    //Register
     const [ formFields, setFormFields ] = useState(defaultFormFields);
+    const { name, email, password, confirmPassword } = formFields;
 
+    const handleChange = (event) => {    
+        const { name, value } = event.target;
+        setFormFields({...formFields, [name] : value})
+    }
+
+    const resetFormFields = () => {
+        setFormFields(defaultFormFields);
+    }
+
+    const handleSignIn = () => async(event) => {
+        event.preventDefault();
+        if(password !== confirmPassword){
+            alert('password do not match');
+            return;
+        }
+
+        try{
+            const { email, password, name } =  formFields;
+            alert({email, password, name})
+        }catch(error){
+            console.log('user creation encountered an error',error)
+        };
+
+        resetFormFields();
+    };
+
+
+    //Password hidden and view
     const [showPassword, setShowPassword] = useState(false)
-    console.log(showPassword)
     const [ passwordType, setPasswordType] = useState("password")
     
-    const handlePasswordView = () => {
+    const handlePasswordView = (event) => {
+        event.preventDefault();
         if(passwordType==="password"){
             setPasswordType("text");
             setShowPassword(true);
@@ -42,42 +71,6 @@ const SignIn = () => {
         }
     }
     
-    const { name, email, password, confirmPassword } = formFields;
-
-    const navigate = useNavigate();
-
-    const resetFormFields = () => {
-        setFormFields(defaultFormFields);
-    }
-
-    const handleChange = (event) => {    
-        const { name, value } = event.target;
-
-        
-        setFormFields({...formFields, [name] : value})
-    }
-    
-  
-    const handleSignIn = () => async(event) => {
-        event.preventDefault();
-
-        if(password !== confirmPassword){
-            alert('password do not match');
-            return;
-        }
-
-        try{
-            const { email, password, name } =  formFields;
-            await createUserWithEmailAndPassword(firebaseAuth, email, password, name);
-            console.log(email, password, name)
-        }catch(error){
-            console.log('user creation encountered an error',error)
-        };
-    };
-
-    onAuthStateChanged(firebaseAuth, (currentUser) => {
-        if(currentUser) navigate("/")
-    })
 
     const handleRedirectLogin = () => {
         navigate("/login")
