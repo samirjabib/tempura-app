@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { 
-    createUserWithEmailAndPassword,
-    onAuthStateChanged
-} from 'firebase/auth'
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { firebaseAuth } from '../../utils/firebase/firebase.utils'
 import { AiFillEye ,AiFillEyeInvisible } from 'react-icons/ai';
@@ -21,7 +18,6 @@ const defaultFormFields = {
 
 
 const SignIn = () => {
-    
     const navigate = useNavigate();
     //Register
     const [ formFields, setFormFields ] = useState(defaultFormFields);
@@ -31,29 +27,15 @@ const SignIn = () => {
         const { name, value } = event.target;
         setFormFields({...formFields, [name] : value})
     }
-
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
+    } 
+
+    const handleSubmit =(event) => {
+        event.preventDefault()
+        console.log({name, email, password, confirmPassword})
+        resetFormFields();
     }
-
-    const handleSignIn = () => async(event) => {
-        event.preventDefault();
-        if(password !== confirmPassword){
-            alert('password do not match');
-            return;
-        }
-
-        try{
-            const { email, password, name } =  formFields;
-            await createUserWithEmailAndPassword(firebaseAuth, email, password, name)
-        }catch(error){
-            console.log('user creation encountered an error',error)
-        };
-    };
-
-    onAuthStateChanged(firebaseAuth, (currentUser)  => {
-        if(currentUser) navigate("/")
-    });
 
     //Password hidden and view
     const [showPassword, setShowPassword] = useState(false)
@@ -76,7 +58,6 @@ const SignIn = () => {
         navigate("/login")
     }
 
-
     return (
         <div className="relative" >
             <BackgroundImage/>
@@ -90,7 +71,7 @@ const SignIn = () => {
                             <span className="">¿don't have account? </span>
                             <span>&#128071;</span>
                         </p>
-                        <form onChange={ handleSignIn} className='w-[80%] flex flex-col py-4 z-50 mx-auto text-sm'>
+                        <form className='w-[80%] flex flex-col py-4 z-50 mx-auto text-sm' onSubmit={handleSubmit}>
                             <input 
                             type="text" 
                             placeholder='Display Name' 
@@ -134,14 +115,8 @@ const SignIn = () => {
                                     size={20}
                                     />
                             }
-                                
-                              
                             </button>
-                            
-                    
                             </div>
-                        
-
                             <input 
                             className="py-3 my-2 bg-white rounded p-2 "
                             type="password" 
@@ -152,14 +127,13 @@ const SignIn = () => {
                             onChange={handleChange}
                             />
                             <button
-                            className="bg-yellow-500 py-3 my-6 rounded font-bold relative top-10 text-lg"> 
-                                Get Started
+                            className="bg-yellow-500 py-3 my-6 rounded font-bold relative top-10 text-lg">
+                                Get started
                             </button>
                             <h3 className="text-white mt-10 ">
                                 <span className="underline">
                                     You have account?   
                                 </span>
-                               
                                 <span 
                                 className="text-yellow-500 font-semibold cursor-pointer m-2" 
                                 onClick={handleRedirectLogin}>
