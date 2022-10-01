@@ -21,8 +21,8 @@ const defaultFormFields = {
 
 
 const SignIn = () => {
+    
     const navigate = useNavigate();
-
     //Register
     const [ formFields, setFormFields ] = useState(defaultFormFields);
     const { name, email, password, confirmPassword } = formFields;
@@ -45,14 +45,15 @@ const SignIn = () => {
 
         try{
             const { email, password, name } =  formFields;
-            alert({email, password, name})
+            await createUserWithEmailAndPassword(firebaseAuth, email, password, name)
         }catch(error){
             console.log('user creation encountered an error',error)
         };
-
-        resetFormFields();
     };
 
+    onAuthStateChanged(firebaseAuth, (currentUser)  => {
+        if(currentUser) navigate("/")
+    });
 
     //Password hidden and view
     const [showPassword, setShowPassword] = useState(false)
@@ -71,11 +72,9 @@ const SignIn = () => {
         }
     }
     
-
     const handleRedirectLogin = () => {
         navigate("/login")
     }
-
 
 
     return (
@@ -139,8 +138,7 @@ const SignIn = () => {
                               
                             </button>
                             
-                           
-
+                    
                             </div>
                         
 

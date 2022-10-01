@@ -26,6 +26,7 @@ const Header = () => {
 
     return (
         <div className="absolute top-0 bg-amber-400 w-screen h-20 flex justify-between items-center p-4 text-white z-50">
+        
             <Link 
             to="/" 
             className=" text-black cursor-pointer  hover:text-yellow-800 duration-500"
@@ -71,7 +72,6 @@ const Header = () => {
                     onClick={handleMenu}
                     />
             }
-            
         </div>
     );
 };
