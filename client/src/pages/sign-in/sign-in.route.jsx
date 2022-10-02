@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 
 import { firebaseAuth } from '../../utils/firebase/firebase.utils'
 import { AiFillEye ,AiFillEyeInvisible } from 'react-icons/ai';
 
 import BackgroundImage from "../../components/background-image/background-image.component";
+import RegisterBackground from '../../assets/login-background.jpg';
+
 import Header from "../../components/header/header.component";
 
 const defaultFormFields = {
@@ -17,11 +19,13 @@ const defaultFormFields = {
 }
 
 
+
 const SignIn = () => {
     const navigate = useNavigate();
     //Register
     const [ formFields, setFormFields ] = useState(defaultFormFields);
     const { name, email, password, confirmPassword } = formFields;
+
 
     const handleChange = (event) => {    
         const { name, value } = event.target;
@@ -31,11 +35,25 @@ const SignIn = () => {
         setFormFields(defaultFormFields);
     } 
 
-    const handleSubmit =(event) => {
+    const handleSubmit =async(event) => {
         event.preventDefault()
-        console.log({name, email, password, confirmPassword})
+        if(password !== confirmPassword){
+            alert("password don't match")
+            return;
+        }
+
+        try {
+            await createUserWithEmailAndPassword(firebaseAuth, email, password)
+        } catch (error) {
+            console.log(error)
+        }
         resetFormFields();
     }
+
+    onAuthStateChanged(firebaseAuth, (currentUser) => {
+        if(currentUser) navigate("/")
+        console.log(currentUser)
+    })
 
     //Password hidden and view
     const [showPassword, setShowPassword] = useState(false)
@@ -58,9 +76,10 @@ const SignIn = () => {
         navigate("/login")
     }
 
+
     return (
         <div className="relative" >
-            <BackgroundImage/>
+            <BackgroundImage background={RegisterBackground}/>
             <Header/>
             <div className="absolute top-0 left-0 bg-black/20 h-screen w-screen flex flex-col justify-center items-center z-20">
                 <div className="min-w-[320px] bg-black/75 text-white text-center relative top-10 lg:min-w-[320px] shadow-2xl rounded-2xl">
@@ -83,7 +102,7 @@ const SignIn = () => {
                             />
                             <input 
                             className="py-3 my-2 bg-white rounded p-2"
-                            type="email" 
+                            type="text" 
                             placeholder="Email adress" 
                             name="email" 
                             value={email}
