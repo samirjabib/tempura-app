@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { backgroundData } from '../../assets/background-hero';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
-import { FiAirplay, } from 'react-icons/fi';
 import { FaPlay, } from 'react-icons/fA';
+import { useNavigate } from 'react-router-dom';
 
 const ImageSlice = () => {
 
     const backgroundImages = backgroundData
 
     const [ activeSlide, setActiveSlide ] = useState(4);
+    
  
 
     const prevSliderHandler = (id) => {
