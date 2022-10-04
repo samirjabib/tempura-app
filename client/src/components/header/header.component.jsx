@@ -8,13 +8,13 @@ import { firebaseAuth } from '../../utils/firebase/firebase.utils';
 
 
 const Header = () => {
+    
 
     let links = [
         { name:"Home", to:"/" ,id:1},
         { name:"Login", to:"/login" ,id:2},
         { name:"Register", to:"/sign-up" ,id:3},
         { name:"Favorites", to:"/sign-up" ,id:4},
-        <button></button>
     ]
 
     const [open, setOpen] = useState(false);
@@ -34,15 +34,10 @@ const Header = () => {
 
     onAuthStateChanged(firebaseAuth, (currentUser) => {
         if(currentUser) navigate("/")
-        console.log(currentUser)
     })
 
-    console.log(firebaseAuth)
-
-
-
     return (
-        <div className="absolute top-0 bg-amber-400 w-screen h-20 flex justify-between items-center p-4  z-50 shadow-2xl">
+        <div className="absolute top-0 bg-amber-400 w-screen h-20 flex justify-between items-center p-4  z-50 shadow-2xl ">
         
             <Link 
             to="/" 
@@ -63,24 +58,26 @@ const Header = () => {
                         md:opacity-100 md:z-auto 
                         bg-black/90 auto z-[-10] 
                         absolute left-0 w-full py-0 md:pl-0 pl-7 
-                        h-auto 
+                        h-auto  overflow-hidden 
                         transition-all ease-in duration 500 ${open ? 'top-20': 'top-[-400px]'}`}>
                 {
                     links.map( (link) => {
-                        return(
-                        <li className={`md:ml-7 text-xl md:my-0 my-7 block text-center ${open ? "text-white" : "text-black"}`} key={link.id}>
+                        return( 
+                        <li 
+                        key={link.id}
+                        className={`md:ml-7 text-xl md:my-0 my-7 block text-center 
+                        ${open ? "text-white" : "text-black"}`} >
+
                             <Link to={link.to} className='text-lg  mx-auto hover:text-yellow-900 duration-500 ' key={link.name}>
-                            
                                 {link.name}
                             </Link>
                             
                         </li>
-                        
                         )
                     })
                     
                 }
-                <AiOutlineLogout className={firebaseAuth ? `text-red-600 w-full  my-5  cursor-pointer align-middle` : 'hidden'} size={30} onClick={handleLogout}/>
+                <AiOutlineLogout className={firebaseAuth ? `text-red-600 w-full  text-center md:my-0 my-7  cursor-pointer align-middle md:ml-7 ml-0` : 'hidden'} size={25} onClick={handleLogout}/>
             </ul>
             { menu
                 ? <AiFillCloseCircle 

@@ -3,9 +3,11 @@ import ImageSlice from "../../components/image-slice/image-slice.component";
 const Tempura = () => {
     
 
+    
+
     return (
         <div className="absolute top-0 bg-black h-screen w-full">
-            <Header/>
+            <Header/> 
             <ImageSlice/>
         </div>
     );

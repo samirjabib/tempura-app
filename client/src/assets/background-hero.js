@@ -6,22 +6,22 @@ import BackgroundFour from './background-hero/background-four.jpg';
 export const backgroundData = [
     {
         id:1,
-        image:{BackgroundOne},
+        image:BackgroundOne,
         title:"img-one",
     },
     {
         id:2,
-        image:{BackgroundTwo},
+        image:BackgroundTwo,
         title:"img-two",
     },
     {
         id:3,
-        image:{BackgroundThree},
+        image:BackgroundThree,
         title:"img-three",
     },
     {
         id:4,
-        image:{BackgroundFour},
+        image:BackgroundFour,
         title:"img-four",
     },
 

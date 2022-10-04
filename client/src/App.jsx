@@ -13,6 +13,7 @@ const App = () => {
           <Route path="/" element={<Tempura/>}/>
           <Route path="/login"  element={<Login/>}/>
           <Route path="/sign-up" element={<SignIn/>}/>
+          <Route exact path="/player"/>
       </Routes>
     </div>
   )
